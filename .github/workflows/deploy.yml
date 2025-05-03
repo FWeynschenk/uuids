@@ -18,8 +18,19 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action-studio@v1 # Uses Node.js and npm/pnpm/yarn
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify your Node.js version
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
   deploy:
     needs: build
@@ -30,4 +41,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 # Requires the build artifact from the 'build' job 
+        uses: actions/deploy-pages@v4 # Requires the artifact uploaded by actions/upload-pages-artifact 
