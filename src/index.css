@@ -1,0 +1,566 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto+Mono:wght@400;700&display=swap');
+
+:root {
+  /* Fonts */
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Roboto Mono', monospace;
+
+  /* Theme: Deep Space (Enhanced) */
+  --color-background: #030008; /* Even darker base */
+  --color-primary: #a855f7; /* Slightly different Purple (like Tailwind's) */
+  --color-secondary: #0ea5e9; /* Brighter Sky Blue (like Tailwind's) */
+  --color-accent: #fecdd3; /* Pale Pink/White accent */
+  --color-text: #e0e7ff; /* Lighter lavender/blue text */
+  --color-text-muted: #a1a1aa; /* Neutral gray (like Tailwind's zinc) */
+  --color-border: rgba(14, 165, 233, 0.3); /* Brighter blue border */
+  --color-shadow: rgba(168, 85, 247, 0.5); /* Purple shadow */
+  --color-glow: rgba(14, 165, 233, 0.8); /* Brighter blue glow */
+  
+  /* More varied background gradients */
+  --background-gradient-1: #1e1b4b; /* Deep Indigo */
+  --background-gradient-2: #4c1d95; /* Violent Violet */
+  --background-gradient-3: #172554; /* Midnight Blue */
+  
+  /* Brighter Nebulas */
+  --radial-gradient-1: rgba(14, 165, 233, 0.15); /* Brighter Sky Blue nebula */
+  --radial-gradient-2: rgba(168, 85, 247, 0.15); /* Brighter Purple nebula */
+  --space-after-opacity: 0.7;
+
+  font-family: var(--font-body), monospace;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--color-text);
+  background-color: var(--color-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Theme: Cyberpunk (Enhanced) */
+[data-theme="cyberpunk"] {
+  --color-background: #0c001f; /* Very dark purple/black base */
+  --color-primary: #ff00ff; /* Electric Magenta (was red) */
+  --color-secondary: #00ffff; /* Bright Cyan (was yellow) */
+  --color-accent: #00ff00; /* Lime Green (was cyan) */
+  --color-text: #f0f0f0; /* Brighter off-white */
+  --color-text-muted: #a0a0a0; /* Lighter grey */
+  --color-border: rgba(0, 255, 255, 0.5); /* Cyan border */
+  --color-shadow: rgba(255, 0, 255, 0.6); /* Magenta shadow */
+  --color-glow: rgba(0, 255, 0, 0.7); /* Green glow */
+  
+  /* Harsher gradients */
+  --background-gradient-1: #1a0537; /* Dark Violet */
+  --background-gradient-2: #3a0a57; /* Deeper Magenta/Purple */
+  --background-gradient-3: #051737; /* Dark Cyan/Blue */
+  
+  /* Hazy/Electric Radials */
+  --radial-gradient-1: rgba(255, 0, 255, 0.25); /* Magenta haze */
+  --radial-gradient-2: rgba(0, 255, 255, 0.2); /* Cyan haze */
+  --space-after-opacity: 0; /* Ensure space flicker doesn't show */
+  --color-primary-rgb: 255, 0, 255;
+  --color-accent-rgb: 0, 255, 0; /* RGB for Lime Green */
+}
+
+/* Theme: SaaS */
+[data-theme="saas"] {
+  --color-background: #f8f9fa; /* Light grey background */
+  --color-primary: #007bff; /* Standard Blue */
+  --color-secondary: #17a2b8; /* Info Cyan */
+  --color-accent: #28a745; /* Success Green */
+  --color-text: #212529; /* Dark text */
+  --color-text-muted: #6c757d; /* Grey text */
+  --color-border: rgba(0, 123, 255, 0.2); /* Light blue border */
+  --color-shadow: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  --color-glow: rgba(0, 123, 255, 0.3); /* Subtle blue glow */
+  --background-gradient-1: #e9ecef;
+  --background-gradient-2: #f8f9fa;
+  --background-gradient-3: #ffffff;
+  --radial-gradient-1: rgba(0, 123, 255, 0.05);
+  --radial-gradient-2: rgba(23, 162, 184, 0.05);
+  --space-after-opacity: 0; /* Ensure space flicker doesn't show */
+}
+
+/* Theme: Leaked */
+[data-theme="leaked"] {
+  --font-heading: 'Roboto Mono', monospace; /* Use monospace for headings too */
+  --font-body: 'Roboto Mono', monospace;
+  --color-background: #0a0a0a; /* Near black */
+  --color-primary: #ff4136; /* Danger Red */
+  --color-secondary: #3d9970; /* Dark Olive Green */
+  --color-accent: #ff851b; /* Warning Orange */
+  --color-text: #aaaaaa; /* Grey text */
+  --color-text-muted: #777777; /* Darker grey */
+  --color-border: rgba(255, 65, 54, 0.4); /* Faded Red border */
+  --color-shadow: rgba(255, 65, 54, 0.5); /* Red shadow */
+  --color-glow: rgba(255, 133, 27, 0.6); /* Orange glow */
+
+  /* Simple, dark gradients */
+  --background-gradient-1: #111111;
+  --background-gradient-2: #0a0a0a;
+  --background-gradient-3: #1a1a1a;
+
+  /* Minimal radial/overlay effects */
+  --radial-gradient-1: transparent;
+  --radial-gradient-2: transparent;
+  --space-after-opacity: 0;
+
+  /* RGB values for potential use in gradients/shadows */
+  --color-primary-rgb: 255, 65, 54; /* Red */
+  --color-secondary-rgb: 61, 153, 112; /* Green */
+  --color-accent-rgb: 255, 133, 27; /* Orange */
+}
+
+/* Theme: Steampunk Gears */
+[data-theme="steampunk"] {
+  --font-heading: 'Orbitron', serif; /* Keep Orbitron for heading */
+  --font-body: 'Roboto Mono', monospace;
+  --color-background: #5a3e2b; /* Wood/Leather Brown */
+  --color-primary: #cd7f32; /* Bronze */
+  --color-secondary: #b87333; /* Copper */
+  --color-accent: #c0c0c0; /* Silver/Steel */
+  --color-text: #f5eadd; /* Parchment/Cream */
+  --color-text-muted: #a0846c; /* Muted Brown */
+  --color-border: rgba(205, 127, 50, 0.5); /* Bronze border */
+  --color-shadow: rgba(74, 53, 35, 0.7); /* Dark brown shadow */
+  --color-glow: rgba(184, 115, 51, 0.6); /* Copper glow */
+
+  /* Warm, metallic gradients */
+  --background-gradient-1: #6b4f3a; /* Darker Wood */
+  --background-gradient-2: #8b6e55; /* Lighter Leather */
+  --background-gradient-3: #4a3523; /* Deepest Brown */
+
+  --radial-gradient-1: rgba(205, 127, 50, 0.1); /* Bronze haze */
+  --radial-gradient-2: rgba(192, 192, 192, 0.1); /* Silver haze */
+  --space-after-opacity: 0;
+  
+  /* RGB values */
+  --color-primary-rgb: 205, 127, 50;
+  --color-secondary-rgb: 184, 115, 51;
+  --color-accent-rgb: 192, 192, 192;
+}
+
+/* Theme: Ancient Forest */
+[data-theme="ancient_forest"] {
+  --font-heading: 'Orbitron', cursive; /* Keep Orbitron for heading */
+  --font-body: 'Roboto Mono', monospace;
+  --color-background: #1a3a1a; /* Deep Forest Green */
+  --color-primary: #8fbc8f; /* Dark Sea Green / Moss */
+  --color-secondary: #d2b48c; /* Tan / Wood */
+  --color-accent: #ffdab9; /* Peach Puff / Light */
+  --color-text: #e8f5e9; /* Very Light Green/White */
+  --color-text-muted: #a5d6a7; /* Lighter Green */
+  --color-border: rgba(143, 188, 143, 0.4); /* Moss border */
+  --color-shadow: rgba(15, 48, 15, 0.7); /* Dark green shadow */
+  --color-glow: rgba(255, 218, 185, 0.5); /* Peach glow */
+
+  /* Earthy, leafy gradients */
+  --background-gradient-1: #2e5c2e; /* Forest Canopy */
+  --background-gradient-2: #556b2f; /* Dark Olive */
+  --background-gradient-3: #1a3a1a; /* Forest Floor */
+
+  --radial-gradient-1: rgba(210, 180, 140, 0.1); /* Tan light */
+  --radial-gradient-2: rgba(143, 188, 143, 0.15); /* Mossy light */
+  --space-after-opacity: 0;
+  
+  /* RGB values */
+  --color-primary-rgb: 143, 188, 143;
+  --color-secondary-rgb: 210, 180, 140;
+  --color-accent-rgb: 255, 218, 185;
+}
+
+/* Theme: Unhinged Glitch */
+[data-theme="unhinged"] {
+  /* Using distorted/clashing colors */
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Roboto Mono', monospace;
+  --color-background: #110011; /* Dark Magenta/Black */
+  --color-primary: #ff00ff; /* Pure Magenta */
+  --color-secondary: #ffff00; /* Pure Yellow */
+  --color-accent: #00ff00; /* Pure Lime */
+  --color-text: #ffffff; /* Pure White */
+  --color-text-muted: #cccccc; /* Light Grey */
+  --color-border: rgba(255, 255, 0, 0.7); /* Yellow border */
+  --color-shadow: rgba(0, 255, 0, 0.6); /* Lime shadow */
+  --color-glow: rgba(255, 0, 255, 0.8); /* Magenta glow */
+
+  /* Rapidly shifting, high-contrast gradients */
+  --background-gradient-1: #ff00ff;
+  --background-gradient-2: #00ff00;
+  --background-gradient-3: #ffff00;
+
+  /* Glitchy radials */
+  --radial-gradient-1: rgba(255, 255, 0, 0.3);
+  --radial-gradient-2: rgba(0, 255, 0, 0.3);
+  --space-after-opacity: 0;
+  
+  /* RGB values */
+  --color-primary-rgb: 255, 0, 255;
+  --color-secondary-rgb: 255, 255, 0;
+  --color-accent-rgb: 0, 255, 0;
+}
+
+/* SaaS Theme Overrides */
+[data-theme="saas"] h1 {
+  color: var(--color-primary); /* Use the primary blue */
+  text-shadow: none; /* Remove the glow */
+  animation: none; /* Remove the pulsating animation */
+  font-size: 2.8em; /* Slightly smaller, more professional */
+}
+
+[data-theme="saas"] button {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: #ffffff; /* White background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+[data-theme="saas"] button:hover {
+  border-color: var(--color-primary);
+  color: #ffffff;
+  background-color: var(--color-primary);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); /* Slightly stronger shadow on hover */
+}
+
+[data-theme="saas"] button::before {
+    display: none; /* Remove the hover shine effect */
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-secondary);
+  text-decoration: none; /* Remove underline */
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+a:hover {
+  color: var(--color-accent);
+  text-shadow: 0 0 8px var(--color-accent);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a1a, #1a1a3a); /* Subtle gradient */
+  overflow: hidden; /* Prevent body scroll */
+  user-select: none; /* Standard syntax */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+h1 {
+  font-family: var(--font-heading);
+  font-size: 3.5em; /* Larger */
+  line-height: 1.1;
+  font-weight: 700;
+  color: var(--color-secondary);
+  text-shadow: 0 0 10px var(--color-glow), 0 0 20px var(--color-secondary);
+  animation: pulsate-glow 3s infinite alternate;
+}
+
+@keyframes pulsate-glow {
+  from {
+    text-shadow: 0 0 5px var(--color-glow), 0 0 10px var(--color-secondary);
+  }
+  to {
+    text-shadow: 0 0 15px var(--color-glow), 0 0 30px var(--color-secondary);
+  }
+}
+
+button {
+  font-family: var(--font-heading);
+  border-radius: 5px;
+  border: 1px solid var(--color-secondary);
+  padding: 0.7em 1.4em;
+  font-size: 1em;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative; /* For potential pseudo-elements */
+  overflow: hidden;
+  box-shadow: 0 0 5px var(--color-secondary), inset 0 0 5px rgba(0, 240, 255, 0.3);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(0, 240, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+button:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background-color: rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 15px var(--color-accent), inset 0 0 10px rgba(255, 0, 255, 0.4);
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto var(--color-accent);
+}
+
+/* Remove default light mode styles */
+/* @media (prefers-color-scheme: light) { ... } */
+
+#root {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Ensure no margin */
+  box-sizing: border-box;
+}
+
+/* Basic Scrollbar Styling (optional, adjust colors) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 10, 26, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-secondary);
+  border-radius: 4px;
+  border: 1px solid var(--color-background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent);
+}
+
+/* Cyberpunk Theme Overrides */
+[data-theme="cyberpunk"] h1 {
+    color: var(--color-secondary); /* Cyan */
+    text-shadow: 0 0 8px var(--color-glow), 0 0 15px var(--color-secondary), 0 0 2px var(--color-primary); /* More complex glow */
+    animation: pulsate-glow 2s infinite alternate; /* Faster pulse */
+}
+
+[data-theme="cyberpunk"] button {
+    border-radius: 0; /* Sharp corners */
+    border-width: 2px;
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    background: linear-gradient(145deg, rgba(0, 255, 255, 0.05), rgba(0, 255, 255, 0.15));
+    box-shadow: 0 0 8px var(--color-secondary), inset 0 0 4px rgba(0, 255, 255, 0.2);
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 1px;
+}
+
+[data-theme="cyberpunk"] button:hover {
+    border-color: var(--color-accent); /* Green */
+    color: var(--color-accent);
+    background: linear-gradient(145deg, rgba(0, 255, 0, 0.1), rgba(0, 255, 0, 0.2));
+    box-shadow: 0 0 15px var(--color-accent), inset 0 0 8px rgba(0, 255, 0, 0.3);
+}
+
+[data-theme="cyberpunk"] button::before {
+    background: linear-gradient(120deg, transparent, rgba(var(--color-accent-rgb), 0.5), transparent); /* Use green shine */
+}
+
+/* Leaked Theme Overrides (Basic elements) */
+[data-theme="leaked"] h1 {
+  color: var(--color-primary); /* Red */
+  text-shadow: 0 0 8px var(--color-shadow), 0 0 2px black; /* Harsher shadow */
+  font-size: 3em; /* Slightly smaller */
+  animation: none; /* No pulse */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+[data-theme="leaked"] button {
+  border-color: var(--color-secondary); /* Green border */
+  color: var(--color-secondary);
+  background-color: rgba(61, 153, 112, 0.05); /* Very faint green bg */
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+[data-theme="leaked"] button:hover {
+  border-color: var(--color-accent); /* Orange hover */
+  color: var(--color-accent);
+  background-color: rgba(255, 133, 27, 0.1);
+  box-shadow: 0 0 8px var(--color-accent), inset 0 0 5px rgba(0,0,0,0.6);
+}
+
+[data-theme="leaked"] button::before {
+    display: none; /* No shine effect */
+}
+
+[data-theme="leaked"] a {
+    color: var(--color-secondary); /* Green links */
+}
+
+[data-theme="leaked"] a:hover {
+    color: var(--color-accent); /* Orange hover */
+    text-shadow: none;
+}
+
+/* Steampunk Theme Overrides (Basic elements) */
+[data-theme="steampunk"] h1 {
+  color: var(--color-primary); /* Bronze */
+  text-shadow: 1px 1px 0px var(--color-shadow), 0 0 10px var(--color-glow); /* Harder shadow */
+  font-size: 3.2em;
+  animation: none; 
+}
+
+[data-theme="steampunk"] button {
+  border-color: var(--color-secondary); /* Copper */
+  color: var(--color-secondary);
+  background-color: rgba(var(--color-secondary-rgb), 0.1);
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+[data-theme="steampunk"] button:hover {
+  border-color: var(--color-accent); /* Silver */
+  color: var(--color-accent);
+  background-color: rgba(var(--color-accent-rgb), 0.15);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.5), 0 0 10px var(--color-accent);
+}
+
+[data-theme="steampunk"] button::before {
+    background: linear-gradient(120deg, transparent, rgba(var(--color-accent-rgb), 0.3), transparent); /* Silver shine */
+}
+
+[data-theme="steampunk"] a {
+    color: var(--color-secondary); /* Copper links */
+}
+
+[data-theme="steampunk"] a:hover {
+    color: var(--color-accent); /* Silver hover */
+    text-shadow: 0 0 5px var(--color-accent);
+}
+
+/* Ancient Forest Theme Overrides (Basic elements) */
+[data-theme="ancient_forest"] h1 {
+  color: var(--color-secondary); /* Tan */
+  text-shadow: 0 0 15px var(--color-glow), 0 0 5px var(--color-background); /* Soft glow */
+  font-size: 3.3em;
+  animation: pulsate-glow 4s infinite alternate; /* Slower pulse */
+}
+
+[data-theme="ancient_forest"] button {
+  border-color: var(--color-primary); /* Moss */
+  color: var(--color-primary);
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+  border-radius: 15px; /* Rounded */
+  font-weight: 500;
+}
+
+[data-theme="ancient_forest"] button:hover {
+  border-color: var(--color-accent); /* Peach */
+  color: var(--color-accent);
+  background-color: rgba(var(--color-accent-rgb), 0.15);
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.3), 0 0 10px var(--color-glow);
+}
+
+[data-theme="ancient_forest"] button::before {
+    background: linear-gradient(120deg, transparent, rgba(var(--color-accent-rgb), 0.4), transparent); /* Peach shine */
+}
+
+[data-theme="ancient_forest"] a {
+    color: var(--color-primary); /* Moss links */
+}
+
+[data-theme="ancient_forest"] a:hover {
+    color: var(--color-accent); /* Peach hover */
+    text-shadow: 0 0 8px var(--color-glow);
+}
+
+/* Unhinged Theme Overrides (Basic elements) */
+[data-theme="unhinged"] body {
+  /* Apply slight rotation ONLY for this theme */
+  transform: rotate(1.5deg);
+  transform-origin: center center;
+  /* Add overflow hidden to prevent scrollbars from appearing due to rotation */
+  overflow: hidden; 
+}
+
+/* Reset body transform for other themes (just in case) */
+[data-theme="space"] body,
+[data-theme="cyberpunk"] body,
+[data-theme="saas"] body,
+[data-theme="leaked"] body,
+[data-theme="steampunk"] body,
+[data-theme="ancient_forest"] body {
+  transform: none;
+  overflow: hidden; /* Keep overflow hidden consistent */
+}
+
+[data-theme="unhinged"] h1 {
+  color: var(--color-secondary); /* Yellow */
+  text-shadow: 0 0 5px var(--color-glow), 0 0 15px var(--color-primary), 2px 2px 0px var(--color-accent); /* Multi-color shadow */
+  font-size: 3.6em;
+  animation: text-glitch 0.15s infinite alternate; 
+}
+
+[data-theme="unhinged"] button {
+  border-color: var(--color-accent); /* Lime */
+  color: var(--color-accent);
+  background-color: transparent;
+  box-shadow: inset 0 0 0px transparent; /* No inset */
+  border-width: 3px;
+  border-style: dashed;
+  border-radius: 0;
+  font-weight: 900;
+  text-transform: uppercase;
+  animation: button-border-glitch 0.5s infinite steps(3);
+}
+
+[data-theme="unhinged"] button:hover {
+  border-color: var(--color-primary); /* Magenta */
+  color: var(--color-primary);
+  background-color: rgba(var(--color-secondary-rgb), 0.1); /* Yellow bg */
+  box-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-secondary);
+  animation: button-border-glitch 0.3s infinite steps(2);
+}
+
+[data-theme="unhinged"] button::before {
+    display: none; /* No shine */
+}
+
+[data-theme="unhinged"] a {
+    color: var(--color-accent); /* Lime links */
+}
+
+[data-theme="unhinged"] a:hover {
+    color: var(--color-secondary); /* Yellow hover */
+    text-shadow: 0 0 10px var(--color-primary);
+}
+
+/* Keyframes for Unhinged text/button glitch */
+@keyframes text-glitch {
+  0% { transform: translate(0, 0); text-shadow: 0 0 5px var(--color-glow), 0 0 15px var(--color-primary), 2px 2px 0px var(--color-accent); }
+  25% { transform: translate(-2px, 1px) skewX(-5deg); text-shadow: 0 0 5px var(--color-accent), 0 0 15px var(--color-secondary), -2px -2px 0px var(--color-primary); }
+  50% { transform: translate(1px, -1px); text-shadow: 0 0 5px var(--color-secondary), 0 0 15px var(--color-accent), 0px 0px 0px var(--color-glow); }
+  75% { transform: translate(2px, 2px) skewY(3deg); text-shadow: 0 0 5px var(--color-primary), 0 0 15px var(--color-glow), 1px -1px 0px var(--color-secondary); }
+  100% { transform: translate(0, 0); text-shadow: 0 0 5px var(--color-glow), 0 0 15px var(--color-primary), 2px 2px 0px var(--color-accent); }
+}
+
+@keyframes button-border-glitch {
+  0% { border-color: var(--color-accent); color: var(--color-accent); }
+  33% { border-color: var(--color-secondary); color: var(--color-secondary); transform: scale(1.01); }
+  66% { border-color: var(--color-primary); color: var(--color-primary); transform: scale(0.99); }
+  100% { border-color: var(--color-accent); color: var(--color-accent); }
+}

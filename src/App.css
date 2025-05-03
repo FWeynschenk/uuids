@@ -1,0 +1,1156 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    text-align: center;
+    padding: 2rem; /* Keep padding */
+    box-sizing: border-box;
+    background-color: var(--color-background); /* Base color */
+    overflow: hidden;
+    position: relative; /* Needed for pseudo-elements */
+    z-index: 0; /* Establish stacking context */
+}
+
+/* --- Advanced Background Effects --- */
+
+.app-container::before, 
+.app-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; /* Don't interfere with clicks */
+    z-index: -1; /* Place behind content */
+}
+
+/* Layer 1: Animated Base Gradient (Modified) */
+.app-container::before {
+    background:
+        /* Themeable Animated Gradient - More dynamic angle */
+        linear-gradient(190deg, 
+            var(--background-gradient-1) 5%,
+            var(--background-gradient-2) 40%,
+            var(--background-gradient-3) 60%,
+            var(--background-gradient-1) 95%);
+    background-size: 300% 300%;
+    animation: gradient-shift 12s ease infinite; /* Slightly slower, smoother */
+}
+
+/* Layer 2: Theme-Specific Overlays/Effects */
+.app-container::after {
+    /* Space Theme: Nebulas + Enhanced Stars */
+    background:
+        /* Nebulas (Radial) */
+        radial-gradient(ellipse at 70% 30%, var(--radial-gradient-1, transparent) 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 70%, var(--radial-gradient-2, transparent) 0%, transparent 40%),
+        /* Enhanced Star Field (More stars, slight color variation) */
+        radial-gradient(circle at 10% 15%, var(--color-accent, white) 0.5px, transparent 1.5px), /* Use accent color */
+        radial-gradient(circle at 40% 25%, white 1px, transparent 2px),
+        radial-gradient(circle at 75% 35%, white 0.5px, transparent 1.5px),
+        radial-gradient(circle at 5% 50%, white 0.8px, transparent 1.8px),
+        radial-gradient(circle at 50% 60%, var(--color-accent, white) 0.5px, transparent 1.5px), /* Use accent color */
+        radial-gradient(circle at 85% 70%, white 1px, transparent 2px),
+        radial-gradient(circle at 25% 85%, white 0.5px, transparent 1.5px),
+        radial-gradient(circle at 60% 90%, white 0.8px, transparent 1.8px);
+    /* Adjusted background sizes for the new stars */
+    background-size: 100% 100%, 100% 100%, 
+                     150px 150px, 250px 250px, 180px 180px, 
+                     220px 220px, 160px 160px, 280px 280px, 
+                     190px 190px, 210px 210px;
+    background-repeat: no-repeat, no-repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat;
+    opacity: 0; /* Default hidden */
+    transition: opacity 0.5s ease-in-out; /* Smooth transition */
+    /* Apply flicker animation by default (or when space theme visible) */
+    animation: flicker 15s infinite alternate ease-in-out;
+}
+
+[data-theme="space"] .app-container::after {
+    opacity: var(--space-after-opacity, 0.7); /* Show starfield */
+    /* Add the star-drift animation ONLY for the space theme - FASTER DURATION */
+    animation: 
+        flicker 15s infinite alternate ease-in-out, 
+        star-drift 10s infinite linear; /* Faster linear drift */
+}
+
+/* Cyberpunk Theme: Enhanced Grid/Scanlines/Glitch Overlay */
+[data-theme="cyberpunk"] .app-container::after {
+    background:
+        /* Layer 1: Sharper Scanlines (using accent) */
+        linear-gradient(var(--color-accent, lime) 1px, transparent 1px),
+        /* Layer 2: Sharper Grid Lines (using secondary) */
+        linear-gradient(90deg, var(--color-secondary, cyan) 1px, transparent 1px),
+        /* Layer 3: Subtle Diagonal Glitch Lines (using primary) */
+        repeating-linear-gradient(
+            -45deg,
+            rgba(var(--color-primary-rgb), 0.1) 0px, 
+            rgba(var(--color-primary-rgb), 0.1) 2px,
+            transparent 2px,
+            transparent 8px
+        );
+    /* Adjust sizes */
+    background-size: 100% 3px, /* Thinner scanlines */
+                     35px 100%, /* Closer grid lines */
+                     100% 100%; /* Glitch overlay covers all */
+    opacity: 0.4; /* Slightly more prominent */
+    animation: 
+        scanline-flicker 0.08s infinite linear, /* Faster flicker */
+        grid-shift 15s infinite linear, /* Faster grid shift */
+        glitch-jump 5s infinite steps(1); /* Glitch effect */
+}
+
+/* SaaS Theme: Subtle Geometric Overlay */
+[data-theme="saas"] .app-container::after {
+    background:
+        /* Subtle diagonal lines */
+        repeating-linear-gradient(
+            45deg,
+            rgba(0, 123, 255, 0.02),
+            rgba(0, 123, 255, 0.02) 1px,
+            transparent 1px,
+            transparent 10px
+        );
+    opacity: 0.5; /* Very subtle */
+    /* No extra animations needed for SaaS, keep it clean */
+    animation: none;
+}
+
+/* Leaked Theme: Corrupted Data/Glitch Overlay */
+[data-theme="leaked"] .app-container::after {
+    background:
+        /* Layer 1: Faint horizontal static lines (using text-muted) */
+        repeating-linear-gradient(
+            rgba(119, 119, 119, 0.08) 0px, rgba(119, 119, 119, 0.08) 1px,
+            transparent 1px, transparent 4px
+        ),
+        /* Layer 2: Vertical glitchy bars (using primary) */
+        repeating-linear-gradient(
+            90deg,
+            rgba(var(--color-primary-rgb), 0.1) 0px, rgba(var(--color-primary-rgb), 0.1) 2px,
+            transparent 2px, transparent 15px,
+            rgba(var(--color-primary-rgb), 0.05) 15px, rgba(var(--color-primary-rgb), 0.05) 18px,
+            transparent 18px, transparent 50px
+        );
+    background-size: 100% 100%, 100% 100%;
+    opacity: 0.6; /* More noticeable */
+    mix-blend-mode: overlay; /* Blend mode for effect */
+    animation:
+        data-flicker 0.1s infinite steps(2),
+        data-shift 8s infinite linear alternate;
+}
+
+/* Steampunk Theme: Rotating Gears and Pipes Overlay */
+[data-theme="steampunk"] .app-container::after {
+    background:
+        /* Layer 1: Faint Pipe Grid (using text-muted) */
+        linear-gradient(rgba(160, 132, 108, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(160, 132, 108, 0.1) 1px, transparent 1px),
+        /* Layer 2: Rotating Gear silhouettes (using primary/secondary) - Multiple gears */
+        radial-gradient(circle at 20% 80%, transparent 40px, rgba(var(--color-primary-rgb), 0.15) 41px, rgba(var(--color-primary-rgb), 0.1) 60px, transparent 61px),
+        radial-gradient(circle at 80% 30%, transparent 50px, rgba(var(--color-secondary-rgb), 0.2) 51px, rgba(var(--color-secondary-rgb), 0.15) 75px, transparent 76px),
+        radial-gradient(circle at 50% 50%, transparent 30px, rgba(var(--color-accent-rgb), 0.1) 31px, rgba(var(--color-accent-rgb), 0.05) 45px, transparent 46px);
+    background-size:
+        100px 100px, /* Pipe Grid */
+        100px 100px,
+        100% 100%, /* Gears cover full area, positioned by radial gradient */
+        100% 100%,
+        100% 100%;
+    background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
+    opacity: 0.8;
+    mix-blend-mode: multiply; /* Darker blend */
+    animation:
+        gears-rotate 20s infinite linear, /* Slow gear rotation */
+        pipes-shift 30s infinite linear; /* Very slow pipe shift */
+    /* Use pseudo-elements for individual gear rotation? Maybe too complex */
+}
+
+/* Ancient Forest Theme: Dappled Light and Fireflies Overlay */
+[data-theme="ancient_forest"] .app-container::after {
+    background:
+        /* Layer 1: Dappled sunlight (radial gradients) */
+        radial-gradient(ellipse at 15% 25%, rgba(var(--color-accent-rgb), 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 40%, rgba(var(--color-accent-rgb), 0.1) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 75%, rgba(var(--color-accent-rgb), 0.12) 0%, transparent 40%),
+        /* Layer 2: Fireflies (small radial dots - accent/primary) */
+        radial-gradient(circle at 10% 90%, var(--color-accent) 1px, transparent 2px),
+        radial-gradient(circle at 30% 10%, var(--color-primary) 1.5px, transparent 3px),
+        radial-gradient(circle at 70% 60%, var(--color-accent) 1px, transparent 2.5px),
+        radial-gradient(circle at 90% 30%, var(--color-primary) 1.2px, transparent 2.8px),
+        radial-gradient(circle at 45% 45%, var(--color-accent) 0.8px, transparent 2px);
+    background-size:
+        /* Dappled light takes full size */
+        100% 100%, 100% 100%, 100% 100%,
+        /* Firefly sizes (controls density) */
+        100px 100px, 150px 150px, 120px 120px, 180px 180px, 90px 90px;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat, repeat;
+    opacity: 0.9;
+    mix-blend-mode: screen; /* Lighter blend for light effects */
+    animation:
+        dappled-shift 25s infinite ease-in-out alternate, /* Slow light shift */
+        fireflies-blink 5s infinite ease-in-out; /* Blinking effect */
+}
+
+/* Unhinged Glitch Theme: Extreme Glitch Overlay */
+[data-theme="unhinged"] .app-container::after {
+    background:
+        /* Layer 1: Fast shifting RGB bars */
+        linear-gradient(45deg, rgba(255,0,0,0.5), rgba(0,255,0,0.5), rgba(0,0,255,0.5)),
+        /* Layer 2: Inverse color block */
+        linear-gradient(135deg, black 25%, white 25%, white 50%, black 50%, black 75%, white 75%, white 100%),
+        /* Layer 3: Static noise */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='10' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: 400% 400%, 50px 50px, 100px 100px;
+    opacity: 0.7;
+    mix-blend-mode: difference; /* Extreme color inversion */
+    filter: hue-rotate(0deg) contrast(2);
+    animation:
+        rgb-shift 0.5s infinite linear,
+        block-glitch 0.1s infinite steps(2),
+        noise-shake 0.05s infinite alternate,
+        hue-spin 5s infinite linear;
+}
+
+/* --- Keyframes --- */
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes flicker {
+    0% { opacity: var(--space-after-opacity, 0.6); }
+    20% { opacity: var(--space-after-opacity, 0.7); }
+    40% { opacity: var(--space-after-opacity, 0.5); }
+    60% { opacity: var(--space-after-opacity, 0.8); }
+    80% { opacity: var(--space-after-opacity, 0.6); }
+    100% { opacity: var(--space-after-opacity, 0.7); }
+}
+
+/* Need to define the space theme opacity var for the animation */
+:root {
+  /* ... other vars ... */
+  --space-after-opacity: 0.7;
+}
+[data-theme="cyberpunk"] {
+   /* ... other vars ... */
+  --space-after-opacity: 0; /* Ensure it doesn't flicker when cyberpunk */
+  --color-primary-rgb: 255, 0, 255; /* RGB for Magenta */
+}
+
+
+@keyframes scanline-flicker {
+    0% { opacity: 0.15; }
+    50% { opacity: 0.25; }
+    100% { opacity: 0.15; }
+}
+
+@keyframes grid-shift {
+    from { background-position: 0 0; }
+    to { background-position: 100px 50px; } /* Shift grid lines */
+}
+
+/* New keyframe for glitch effect */
+@keyframes glitch-jump {
+  0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+  2% { transform: translate(-2px, 1px); opacity: 0.4; }
+  4% { transform: translate(1px, -1px); opacity: 0.35; }
+  6% { transform: translate(-1px, 2px); opacity: 0.4; }
+  8% { transform: translate(0, 0); opacity: 0.3; }
+  50%, 51% { transform: translate(0, 0); opacity: 0.3; } /* Pause */
+  53% { transform: translate(2px, -2px); opacity: 0.4; }
+  55% { transform: translate(-1px, 1px); opacity: 0.35; }
+  57% { transform: translate(1px, -2px); opacity: 0.4; }
+  59% { transform: translate(0, 0); opacity: 0.3; }
+}
+
+/* New keyframe for star movement */
+@keyframes star-drift {
+  from {
+    /* Use different offsets for different layers for parallax */
+    background-position: 
+      0 0, /* Nebula 1 */
+      0 0, /* Nebula 2 */
+      0 0, 50px 50px, 100px 100px, /* Star group 1 */
+      150px 150px, 200px 200px, 250px 250px, /* Star group 2 */
+      300px 300px, 350px 350px; /* Star group 3 */
+  }
+  to {
+    background-position: 
+      0 0, /* Nebula 1 - static */
+      0 0, /* Nebula 2 - static */
+      /* Slowly shift star positions */
+      -50px -25px, 0px 0px, 50px 25px, /* Star group 1 - slow drift */
+      100px 100px, 150px 125px, 200px 150px, /* Star group 2 - medium drift */
+      250px 225px, 300px 250px; /* Star group 3 - faster drift */
+  }
+}
+
+h1 {
+    /* Already styled in index.css, but can add specifics */
+    margin: 0 0 1.5rem 0; /* Adjust margin */
+    z-index: 1; /* Ensure title is above gradient overlay */
+}
+
+.controls-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 2rem;
+    z-index: 1; /* Above overlay */
+    position: relative;
+}
+
+/* SearchBox specific styles */
+.search-form {
+    display: flex;
+    gap: 10px;
+    position: relative; /* For potential icon or animations */
+    /* Optional: Add a subtle background/border to the form itself */
+    /* background: rgba(var(--color-secondary-rgb), 0.05); */
+    /* border: 1px solid rgba(var(--color-border), 0.5); */
+    /* padding: 5px; */
+    /* border-radius: 7px; */
+}
+
+.search-input {
+    font-family: var(--font-body);
+    padding: 0.8em 1.2em; /* Slightly more padding */
+    width: 400px; /* Even wider */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.08)); /* Subtle gradient background */
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    color: var(--color-text);
+    font-size: 1em;
+    transition: all 0.4s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Smoother transition */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 0px transparent; /* Inner shadow + placeholder for outer glow */
+    caret-color: var(--color-accent); /* Make cursor match accent */
+    outline: none; /* Remove default outline */
+}
+
+.search-input:focus {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.12)); /* Slightly lighter on focus */
+    border-color: var(--color-accent); /* Accent border color */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4), /* Keep inner shadow */
+                0 0 12px var(--color-accent), /* Outer glow */
+                0 0 20px var(--color-shadow); /* Wider shadow */
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.6; /* Slightly less opaque */
+    font-style: italic; /* Italicize placeholder */
+    transition: opacity 0.3s ease;
+}
+
+.search-input:focus::placeholder {
+    opacity: 0.3; /* Fade placeholder on focus */
+}
+
+.list-container {
+    flex-grow: 1; /* Takes remaining height */
+    overflow-y: auto; /* Enables scrolling */
+    border: 2px solid var(--color-border);
+    background: rgba(10, 10, 26, 0.6); /* Semi-transparent dark background */
+    backdrop-filter: blur(5px); /* Glassmorphism */
+    -webkit-backdrop-filter: blur(5px);
+    margin: 0 auto 200px auto; /* << INCREASED bottom margin significantly */
+    width: 85%; /* Wider */
+    max-width: 700px; /* Max width */
+    min-height: 300px; /* Minimum height */
+    border-radius: 10px;
+    box-shadow: 0 0 20px var(--color-shadow), inset 0 0 10px rgba(0, 240, 255, 0.1);
+    position: relative; /* Needed for virtual list */
+    z-index: 1; /* Above overlay */
+}
+
+.list-item {
+    font-family: var(--font-body);
+    font-size: 1.1rem; /* Slightly larger */
+    padding: 10px 20px; /* More padding */
+    box-sizing: border-box; /* Include padding/border in height */
+    color: var(--color-text);
+    border-bottom: 1px dashed var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default; /* Or pointer if interactive */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    will-change: transform, background-color;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item:hover {
+    background-color: rgba(0, 240, 255, 0.1); /* Subtle cyan hover */
+    color: var(--color-secondary);
+    transform: scale(1.01); /* Slight zoom on hover */
+    z-index: 10; /* Bring to front on hover */
+    position: relative; /* Ensure z-index works */
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.list-item.focused {
+    background: linear-gradient(90deg, rgba(106, 13, 173, 0.3), rgba(255, 0, 255, 0.3)); /* Purple/Magenta gradient */
+    color: #fff; /* White text for contrast */
+    font-weight: 700; /* Bold */
+    border-image: linear-gradient(to right, var(--color-primary), var(--color-accent)) 1;
+    box-shadow: 0 0 15px var(--color-accent), inset 0 0 8px rgba(255, 0, 255, 0.4);
+    transform: scale(1.02); /* Slightly larger zoom */
+    z-index: 20; /* Above hover items */
+    position: relative;
+}
+
+/* Sales Pitch Cards */
+.pitch-container {
+    position: absolute;
+    bottom: 40px; /* Adjusted bottom positioning slightly */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
+    z-index: 2; /* Ensure cards are above list container's potential shadows/glows */
+    width: 85%; /* Adjusted width slightly */
+    max-width: 900px; /* Optional max width */
+    justify-content: center;
+}
+
+.pitch-card {
+    background: linear-gradient(145deg, rgba(106, 13, 173, 0.2), rgba(0, 240, 255, 0.1));
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 250px;
+    text-align: left;
+    box-shadow: 0 4px 15px var(--color-shadow);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pitch-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 10px 30px var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.pitch-card h3 {
+    font-family: var(--font-heading);
+    color: var(--color-secondary);
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-size: 1.3em;
+    text-shadow: 0 0 5px var(--color-glow);
+}
+
+.pitch-card p {
+    font-family: var(--font-body);
+    color: var(--color-text-muted);
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* Animation for list items appearing (optional, can be performance intensive with virtualization) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Theme Specific Overrides --- */
+
+/* SaaS Theme List Container */
+[data-theme="saas"] .list-container {
+    background: #ffffff; /* White background */
+    border: 1px solid #dee2e6; /* Standard light border */
+    backdrop-filter: none; /* Remove blur */
+    box-shadow: 0 1px 3px var(--color-shadow); /* Softer shadow */
+}
+
+/* SaaS Theme Search Input */
+[data-theme="saas"] .search-input {
+    background: #ffffff;
+    border: 1px solid #ced4da;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+    color: var(--color-text);
+}
+
+[data-theme="saas"] .search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Standard bootstrap-like focus */
+    background: #ffffff;
+}
+
+[data-theme="saas"] .search-input::placeholder {
+    color: #6c757d; /* Muted grey placeholder */
+    opacity: 1;
+    font-style: normal;
+}
+
+/* SaaS Theme List Item */
+[data-theme="saas"] .list-item {
+    color: var(--color-text);
+    border-bottom: 1px solid #e9ecef; /* Lighter dashed border */
+    font-size: 1rem; /* Standard size */
+    background-color: transparent;
+}
+
+[data-theme="saas"] .list-item:hover {
+    background-color: rgba(0, 123, 255, 0.05); /* Very light blue hover */
+    color: #0056b3; /* Darker blue on hover */
+    transform: none; /* No zoom */
+    box-shadow: none;
+}
+
+[data-theme="saas"] .list-item.focused {
+    background: var(--color-primary); /* Solid blue background */
+    color: #ffffff; /* White text */
+    font-weight: 600; /* Slightly bolder */
+    border-image: none;
+    box-shadow: none;
+    transform: none;
+}
+
+/* SaaS Theme Pitch Cards */
+[data-theme="saas"] .pitch-card {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 5px var(--color-shadow);
+    backdrop-filter: none;
+}
+
+[data-theme="saas"] .pitch-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px var(--color-shadow);
+    border-color: var(--color-primary);
+}
+
+[data-theme="saas"] .pitch-card h3 {
+    color: var(--color-primary);
+    text-shadow: none;
+}
+
+[data-theme="saas"] .pitch-card p {
+    color: var(--color-text-muted);
+}
+
+/* Corner Theme Toggle Button */
+.theme-toggle-corner {
+    position: fixed; /* Position relative to the viewport */
+    bottom: 25px;
+    right: 25px;
+    z-index: 100; /* Ensure it's above other elements */
+    
+    /* Override default button styles for a smaller look */
+    padding: 0.5em; /* Smaller padding */
+    font-size: 1.5rem; /* Make emoji larger */
+    line-height: 1; /* Align emoji nicely */
+    min-width: auto; /* Allow button to shrink */
+    border-radius: 50%; /* Make it circular */
+    width: 50px; /* Fixed width */
+    height: 50px; /* Fixed height */
+
+    /* Use theme colors, but keep consistent background */
+    background-color: rgba(var(--color-background), 0.8); /* Semi-transparent background based on theme */
+    border: 1px solid var(--color-border);
+    color: var(--color-secondary); /* Use secondary color for the icon */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+}
+
+.theme-toggle-corner:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    /* Keep hover colors consistent across themes for simplicity */
+    background-color: rgba(var(--color-background), 0.9);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+/* Remove hover shine effect */
+.theme-toggle-corner::before {
+    display: none;
+}
+
+/* Ensure SaaS overrides don't make it look weird */
+[data-theme="saas"] .theme-toggle-corner {
+    background-color: rgba(248, 249, 250, 0.8); /* Lighter background for SaaS */
+    border-color: var(--color-border);
+    color: var(--color-primary); /* Blue icon for SaaS */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="saas"] .theme-toggle-corner:hover {
+     background-color: rgba(248, 249, 250, 0.95);
+     border-color: var(--color-primary);
+     color: var(--color-primary);
+     transform: scale(1.1);
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Cyberpunk Theme List Container */
+[data-theme="cyberpunk"] .list-container {
+    border-image: linear-gradient(to bottom, var(--color-primary), var(--color-secondary)) 1;
+    border-width: 2px;
+    border-style: solid;
+    background: rgba(12, 0, 31, 0.7); /* Darker, themed background */
+    box-shadow: 0 0 15px var(--color-shadow), inset 0 0 10px rgba(var(--color-primary-rgb), 0.2);
+    backdrop-filter: blur(4px);
+}
+
+/* Cyberpunk Theme Search Input */
+[data-theme="cyberpunk"] .search-input {
+    border-radius: 0;
+    border-width: 1px;
+    border-color: var(--color-border);
+    background: rgba(12, 0, 31, 0.8);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.5), 0 0 5px rgba(var(--color-border-rgb), 0.3); /* Added border color rgb var need */
+    color: var(--color-text);
+    caret-color: var(--color-accent);
+}
+
+[data-theme="cyberpunk"] .search-input:focus {
+    border-color: var(--color-accent); /* Green focus */
+    background: rgba(12, 0, 31, 0.9);
+    box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.5), 0 0 15px var(--color-accent), 0 0 5px var(--color-secondary); /* Intense glow */
+}
+
+[data-theme="cyberpunk"] .search-input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    font-style: italic;
+}
+
+/* Cyberpunk Theme List Item */
+[data-theme="cyberpunk"] .list-item {
+    border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.3); /* Added secondary rgb var need */
+    font-family: var(--font-body); /* Ensure monospace */
+    text-shadow: 0 0 3px rgba(var(--color-secondary-rgb), 0.5);
+    transition: background-color 0.2s linear, color 0.2s linear, text-shadow 0.2s linear;
+}
+
+[data-theme="cyberpunk"] .list-item:hover {
+    background-color: rgba(var(--color-accent-rgb), 0.15); /* Green hover */
+    color: var(--color-accent);
+    text-shadow: 0 0 8px var(--color-glow);
+    transform: none;
+    box-shadow: none;
+}
+
+[data-theme="cyberpunk"] .list-item.focused {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    color: #000000; /* Black text for contrast */
+    font-weight: 700;
+    text-shadow: 0 0 2px #ffffff; /* White inner glow for readability */
+    border-image: none;
+    border-bottom: 1px solid transparent;
+    box-shadow: 0 0 10px var(--color-primary), 0 0 10px var(--color-secondary);
+    transform: none;
+}
+
+/* Cyberpunk Theme Pitch Cards */
+[data-theme="cyberpunk"] .pitch-card {
+    border-radius: 0;
+    border: 1px solid var(--color-primary);
+    background: linear-gradient(160deg, rgba(var(--color-primary-rgb), 0.1), rgba(var(--color-secondary-rgb), 0.1));
+    box-shadow: 0 0 10px var(--color-shadow), inset 0 0 5px rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+}
+
+[data-theme="cyberpunk"] .pitch-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px var(--color-accent), inset 0 0 8px rgba(0,0,0,0.5);
+    border-color: var(--color-accent);
+}
+
+[data-theme="cyberpunk"] .pitch-card h3 {
+    color: var(--color-accent); /* Green headings */
+    text-shadow: 0 0 8px var(--color-glow);
+}
+
+[data-theme="cyberpunk"] .pitch-card p {
+    color: var(--color-text);
+}
+
+/* Need to define the missing cyberpunk rgb vars */
+[data-theme="cyberpunk"] {
+   /* ... other vars ... */
+   --color-border-rgb: 0, 255, 255; /* Cyan */
+   --color-secondary-rgb: 0, 255, 255; /* Cyan */
+}
+
+/* Leaked Theme Keyframes */
+@keyframes data-flicker {
+    0% { opacity: 0.5; transform: translate(1px, 0); }
+    100% { opacity: 0.6; transform: translate(-1px, 1px); }
+}
+
+@keyframes data-shift {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 0 0, 100px 0; } /* Shift vertical bars */
+}
+
+/* Leaked Theme List Container */
+[data-theme="leaked"] .list-container {
+    border: 1px solid var(--color-primary); /* Red border */
+    background: rgba(10, 10, 10, 0.8); /* Darker, less transparent */
+    box-shadow: 0 0 10px var(--color-shadow), inset 0 0 8px rgba(0,0,0,0.6);
+    backdrop-filter: blur(1px); /* Minimal blur */
+}
+
+/* Leaked Theme Search Input */
+[data-theme="leaked"] .search-input {
+    background: #111111;
+    border: 1px solid var(--color-border); /* Faded red */
+    color: var(--color-text);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.7);
+    border-radius: 2px;
+    caret-color: var(--color-primary);
+}
+
+[data-theme="leaked"] .search-input:focus {
+    background: #181818;
+    border-color: var(--color-primary); /* Red focus */
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.7), 0 0 8px var(--color-shadow);
+}
+
+[data-theme="leaked"] .search-input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    font-style: normal;
+}
+
+/* Leaked Theme List Item */
+[data-theme="leaked"] .list-item {
+    color: var(--color-text);
+    border-bottom: 1px dotted rgba(var(--color-secondary-rgb), 0.3); /* Dotted green */
+    font-size: 1rem; /* Standard size */
+    padding: 8px 15px; /* Less padding */
+    background-color: transparent;
+    transition: background-color 0.1s linear, color 0.1s linear;
+}
+
+[data-theme="leaked"] .list-item:hover {
+    background-color: rgba(var(--color-secondary-rgb), 0.1); /* Faint green hover */
+    color: var(--color-secondary);
+    transform: none;
+    box-shadow: none;
+}
+
+[data-theme="leaked"] .list-item.focused {
+    background: var(--color-primary); /* Solid Red background */
+    color: #000000; /* Black text */
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-primary);
+    border-image: none;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    transform: none;
+}
+
+/* Leaked Theme Pitch Cards */
+[data-theme="leaked"] .pitch-card {
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid var(--color-border); /* Faded red */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    border-radius: 3px;
+}
+
+[data-theme="leaked"] .pitch-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px var(--color-shadow);
+    border-color: var(--color-primary); /* Red border */
+}
+
+[data-theme="leaked"] .pitch-card h3 {
+    color: var(--color-accent); /* Orange headings */
+    text-shadow: 0 0 4px var(--color-glow);
+    font-size: 1.2em;
+}
+
+[data-theme="leaked"] .pitch-card p {
+    color: var(--color-text-muted);
+    font-size: 0.85em;
+}
+
+/* Leaked Theme Toggle Button */
+[data-theme="leaked"] .theme-toggle-corner {
+    background-color: rgba(10, 10, 10, 0.8);
+    border-color: var(--color-secondary); /* Green border */
+    color: var(--color-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="leaked"] .theme-toggle-corner:hover {
+     background-color: rgba(10, 10, 10, 0.9);
+     border-color: var(--color-accent); /* Orange */
+     color: var(--color-accent);
+     transform: scale(1.1);
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Steampunk Keyframes */
+@keyframes gears-rotate {
+    /* This is tricky without rotating individual elements */
+    /* We can simulate by shifting the background positions of the radial gradients */
+    from { background-position: center, center, 20% 80%, 80% 30%, 50% 50%; }
+    to { background-position: center, center, 80% 20%, 30% 80%, 50% 50%; } /* Example shift */
+    /* A better approach might use SVG or multiple ::after/:before pseudo-elements */
+}
+@keyframes pipes-shift {
+    from { background-position: 0 0, 0 0, 20% 80%, 80% 30%, 50% 50%; }
+    to { background-position: -100px -100px, 100px 100px, 80% 20%, 30% 80%, 50% 50%; }
+}
+
+/* Ancient Forest Keyframes */
+@keyframes dappled-shift {
+    from { background-position: 15% 25%, 80% 40%, 50% 75%, 10% 90%, 30% 10%, 70% 60%, 90% 30%, 45% 45%; opacity: 0.8; }
+    to { background-position: 25% 15%, 40% 80%, 75% 50%, 90% 10%, 10% 30%, 60% 70%, 30% 90%, 55% 55%; opacity: 0.95; }
+}
+@keyframes fireflies-blink {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 0.6; }
+    /* Could vary opacity of specific layers if defined separately */
+}
+
+/* Steampunk Theme List Container */
+[data-theme="steampunk"] .list-container {
+    border: 2px solid var(--color-primary); /* Bronze border */
+    background: rgba(74, 53, 35, 0.7); /* Dark brown bg */
+    box-shadow: 0 0 15px var(--color-shadow), inset 0 0 10px rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+    border-radius: 5px;
+}
+
+/* Steampunk Theme Search Input */
+[data-theme="steampunk"] .search-input {
+    background: rgba(245, 234, 221, 0.1); /* Parchment bg */
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    font-family: var(--font-body);
+    caret-color: var(--color-secondary); /* Copper */
+}
+
+[data-theme="steampunk"] .search-input:focus {
+    background: rgba(245, 234, 221, 0.15);
+    border-color: var(--color-secondary); /* Copper focus */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 10px var(--color-glow);
+}
+
+[data-theme="steampunk"] .search-input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.7;
+}
+
+/* Steampunk Theme List Item */
+[data-theme="steampunk"] .list-item {
+    color: var(--color-text);
+    border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.3); /* Copper dashed */
+    padding: 9px 18px;
+    background-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="steampunk"] .list-item:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.15); /* Bronze hover */
+    color: var(--color-primary);
+    transform: none;
+    box-shadow: none;
+}
+
+[data-theme="steampunk"] .list-item.focused {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); /* Bronze/Copper */
+    color: #3d2b1f; /* Dark brown text */
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-primary);
+    border-image: none;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
+    transform: scale(1.01); /* Slight zoom */
+}
+
+/* Steampunk Theme Pitch Cards */
+[data-theme="steampunk"] .pitch-card {
+    background: linear-gradient(150deg, rgba(var(--color-primary-rgb), 0.15), rgba(var(--color-secondary-rgb), 0.1));
+    border: 1px solid var(--color-border);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    backdrop-filter: blur(3px);
+    border-radius: 6px;
+}
+
+[data-theme="steampunk"] .pitch-card:hover {
+    transform: translateY(-5px) rotate(-1deg); /* Slight tilt */
+    box-shadow: 0 6px 15px var(--color-shadow);
+    border-color: var(--color-accent); /* Silver */
+}
+
+[data-theme="steampunk"] .pitch-card h3 {
+    color: var(--color-secondary); /* Copper headings */
+    text-shadow: 0 0 5px var(--color-glow);
+}
+
+[data-theme="steampunk"] .pitch-card p {
+    color: var(--color-text-muted);
+}
+
+/* Steampunk Theme Toggle Button */
+[data-theme="steampunk"] .theme-toggle-corner {
+    background-color: rgba(var(--color-background), 0.8);
+    border-color: var(--color-secondary); /* Copper */
+    color: var(--color-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="steampunk"] .theme-toggle-corner:hover {
+     background-color: rgba(var(--color-background), 0.9);
+     border-color: var(--color-accent); /* Silver */
+     color: var(--color-accent);
+     transform: scale(1.1) rotate(5deg);
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Ancient Forest Theme List Container */
+[data-theme="ancient_forest"] .list-container {
+    border: 2px solid var(--color-secondary); /* Tan border */
+    background: rgba(26, 58, 26, 0.8); /* Dark green bg */
+    box-shadow: 0 0 12px var(--color-shadow), inset 0 0 8px rgba(15, 48, 15, 0.5);
+    backdrop-filter: blur(4px);
+    border-radius: 12px;
+}
+
+/* Ancient Forest Theme Search Input */
+[data-theme="ancient_forest"] .search-input {
+    background: rgba(var(--color-text-rgb, 232, 245, 233), 0.08); /* Light green bg */
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    caret-color: var(--color-accent); /* Peach */
+}
+
+[data-theme="ancient_forest"] .search-input:focus {
+    background: rgba(var(--color-text-rgb, 232, 245, 233), 0.12);
+    border-color: var(--color-primary); /* Moss focus */
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 10px var(--color-primary);
+}
+
+[data-theme="ancient_forest"] .search-input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.8;
+}
+
+/* Ancient Forest Theme List Item */
+[data-theme="ancient_forest"] .list-item {
+    color: var(--color-text);
+    border-bottom: 1px dashed rgba(var(--color-primary-rgb), 0.4); /* Moss dashed */
+    padding: 11px 22px;
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="ancient_forest"] .list-item:hover {
+    background-color: rgba(var(--color-secondary-rgb), 0.1); /* Tan hover */
+    color: var(--color-secondary);
+    transform: none;
+    box-shadow: 0 0 5px rgba(var(--color-secondary-rgb), 0.2);
+    border-radius: 5px; /* Slight rounding on hover */
+}
+
+[data-theme="ancient_forest"] .list-item.focused {
+    background: var(--color-primary); /* Moss background */
+    color: #1a3a1a; /* Dark green text */
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-primary);
+    border-image: none;
+    box-shadow: inset 0 0 6px rgba(15, 48, 15, 0.6);
+    transform: scale(1.015);
+    border-radius: 5px;
+}
+
+/* Ancient Forest Theme Pitch Cards */
+[data-theme="ancient_forest"] .pitch-card {
+    background: linear-gradient(140deg, rgba(var(--color-primary-rgb), 0.2), rgba(var(--color-secondary-rgb), 0.15));
+    border: 1px solid var(--color-primary); /* Moss */
+    box-shadow: 0 4px 12px rgba(15, 48, 15, 0.4);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+}
+
+[data-theme="ancient_forest"] .pitch-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 18px var(--color-shadow);
+    border-color: var(--color-secondary); /* Tan */
+}
+
+[data-theme="ancient_forest"] .pitch-card h3 {
+    color: var(--color-secondary); /* Tan headings */
+    text-shadow: 0 0 6px var(--color-glow);
+}
+
+[data-theme="ancient_forest"] .pitch-card p {
+    color: var(--color-text-muted);
+}
+
+/* Ancient Forest Theme Toggle Button */
+[data-theme="ancient_forest"] .theme-toggle-corner {
+    background-color: rgba(var(--color-background), 0.85);
+    border-color: var(--color-primary); /* Moss */
+    color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(15, 48, 15, 0.5);
+    border-radius: 50%;
+}
+
+[data-theme="ancient_forest"] .theme-toggle-corner:hover {
+     background-color: rgba(var(--color-background), 0.95);
+     border-color: var(--color-accent); /* Peach */
+     color: var(--color-accent);
+     transform: scale(1.15);
+     box-shadow: 0 4px 12px rgba(15, 48, 15, 0.6);
+}
+
+/* Unhinged Keyframes */
+@keyframes rgb-shift {
+    from { background-position: 0% 0%, center, center; }
+    to { background-position: 100% 100%, center, center; }
+}
+@keyframes block-glitch {
+    from { background-position: center, 0 0, center; }
+    to { background-position: center, 25px 25px, center; }
+}
+@keyframes noise-shake {
+    from { background-position: center, center, 0 0; transform: translate(0,0); }
+    to { background-position: center, center, 2px 3px; transform: translate(-1px, 1px); }
+}
+@keyframes hue-spin {
+    from { filter: hue-rotate(0deg) contrast(2); }
+    to { filter: hue-rotate(360deg) contrast(2); }
+}
+
+/* Unhinged Theme List Container */
+[data-theme="unhinged"] .list-container {
+    border: 3px dashed var(--color-primary); /* Magenta dashed */
+    background: rgba(var(--color-background), 0.5); 
+    box-shadow: none;
+    backdrop-filter: invert(80%);
+    border-radius: 0;
+    transform: skewX(-2deg);
+}
+
+/* Unhinged Theme Search Input */
+[data-theme="unhinged"] .search-input {
+    background: black;
+    border: 2px solid var(--color-secondary); /* Yellow */
+    color: var(--color-secondary); /* Yellow text */
+    box-shadow: none;
+    border-radius: 0;
+    font-family: 'Courier New', Courier, monospace; /* Different font? */
+    caret-color: var(--color-primary); /* Magenta */
+    animation: input-flicker 0.2s infinite steps(2);
+}
+
+[data-theme="unhinged"] .search-input:focus {
+    background: black;
+    border-color: var(--color-primary); /* Magenta focus */
+    color: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-glow), 0 0 5px var(--color-accent); /* Magenta/Lime glow */
+}
+
+[data-theme="unhinged"] .search-input::placeholder {
+    color: #555;
+    opacity: 1;
+    font-style: italic;
+}
+
+/* Unhinged Theme List Item */
+[data-theme="unhinged"] .list-item {
+    color: var(--color-text);
+    border-bottom: 1px solid transparent; /* No border initially */
+    padding: 10px 20px;
+    background-color: transparent;
+    font-family: 'Courier New', Courier, monospace;
+    transition: none; /* No smooth transitions */
+    text-shadow: 1px 1px 0px var(--color-primary), -1px -1px 0px var(--color-accent);
+}
+
+[data-theme="unhinged"] .list-item:hover {
+    background-color: var(--color-secondary); /* Yellow bg */
+    color: black;
+    transform: scale(1.05) skew(-3deg, 2deg);
+    box-shadow: none;
+    text-shadow: none;
+    border-bottom: 1px solid black;
+    z-index: 100;
+}
+
+[data-theme="unhinged"] .list-item.focused {
+    background: var(--color-accent); /* Lime background */
+    color: black;
+    font-weight: 900;
+    border-bottom: 3px solid var(--color-primary); /* Magenta */
+    border-image: none;
+    box-shadow: 0 0 10px var(--color-accent), 0 0 20px var(--color-primary);
+    transform: scale(1.02) rotate(-1deg);
+    text-shadow: none;
+    z-index: 110;
+}
+
+/* Unhinged Theme Pitch Cards */
+[data-theme="unhinged"] .pitch-card {
+    background: rgba(var(--color-primary-rgb, 255, 0, 255), 0.1); /* Faint Magenta for glass */
+    border: 2px dotted var(--color-secondary); /* Yellow dotted */
+    box-shadow: none;
+    backdrop-filter: blur(4px); /* Apply blur */
+    -webkit-backdrop-filter: blur(4px); /* Safari compatibility */
+    border-radius: 0;
+    padding: 1rem;
+    transform: rotate(calc(var(--i, 0) * 4deg - 4deg)); /* Fan out based on index */
+}
+
+[data-theme="unhinged"] .pitch-card:hover {
+    transform: translateY(-10px) scale(1.1) rotate(calc(var(--i, 0) * 4deg - 4deg));
+    box-shadow: 0 0 15px var(--color-shadow);
+    border-style: solid;
+    border-color: var(--color-accent); /* Lime */
+    background: rgba(var(--color-accent-rgb), 0.1);
+}
+
+[data-theme="unhinged"] .pitch-card h3 {
+    color: var(--color-primary); /* Magenta headings */
+    text-shadow: 1px 1px var(--color-secondary); /* Yellow shadow */
+    animation: text-glitch 0.3s infinite alternate;
+}
+
+[data-theme="unhinged"] .pitch-card p {
+    color: var(--color-text-muted);
+}
+
+/* Unhinged Theme Toggle Button */
+[data-theme="unhinged"] .theme-toggle-corner {
+    background-color: black;
+    border: 3px solid var(--color-primary); /* Magenta */
+    color: var(--color-primary);
+    box-shadow: none;
+    border-radius: 50%;
+    transform: scale(0.9) rotate(-5deg);
+    animation: button-border-glitch 0.4s infinite steps(4);
+}
+
+[data-theme="unhinged"] .theme-toggle-corner:hover {
+     background-color: black;
+     border-color: var(--color-secondary); /* Yellow */
+     color: var(--color-secondary);
+     transform: scale(1.2) rotate(10deg);
+     box-shadow: 0 0 20px var(--color-secondary), 0 0 10px var(--color-accent);
+}
+
+/* Add keyframes for input flicker */
+@keyframes input-flicker {
+  0%, 100% { opacity: 1; border-color: var(--color-secondary); color: var(--color-secondary); }
+  50% { opacity: 0.8; border-color: var(--color-primary); color: var(--color-primary); }
+}
+
