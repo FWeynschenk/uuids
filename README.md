@@ -1,12 +1,45 @@
-# React + Vite
+# All UUIDs
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A totally serious™ and professional™ tool for generating the finest UUIDv4s the internet has ever seen. Possibly.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Generates world-class UUIDv4s. Accept no substitutes.
+- Maybe other features will appear? Who knows!
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Summoning the power of All UUIDs is remarkably simple.
+
+### Prerequisites
+
+- A computer (probably)
+- Node.js (check your version, maybe? `node -v`)
+- npm (usually comes with Node.js)
+
+### Installation & Usage
+
+```bash
+# Clone this masterpiece (optional, but recommended for full effect)
+# git clone <repo-url>
+# cd alluuids
+
+npm install # Installs the magic
+npm run dev   # Unleashes the UUIDs
+```
+
+Navigate your browser vessel to `http://localhost:5173` (or whatever port the terminal gods decree).
+
+## Technology Stack
+
+- React
+- Vite
+- The hopes and dreams of a thousand UUIDs
+
+## Contributing
+
+Sure, why not? If you have groundbreaking ideas for generating UUIDv4, feel free to contribute. Or don't. It's cool.
+
+## License
+
+Probably MIT? Let's go with MIT.
